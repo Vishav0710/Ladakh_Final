@@ -1,0 +1,8 @@
+[2025-03-18 23:29:31] User -> Read Message ->Leh@pds| Requested
+JSON -> please respond | Leh@pds
+[2025-03-18 23:29:34] District User -> Warehouse InActive -> Leh@pds| G_Rice_A/B
+[2025-03-18 23:29:36] District User -> Warehouse Active -> Leh@pds| G_Rice_A/B
+[2025-03-18 23:29:49] District User -> Warehouse Edit->Leh@pds|
+Requested JSON -> {"name":"Arjun Upadhyay ji","uniqueid":"WH_67cf2235e62f","active":"1","type":"motorable","latitude":"20.95735","storage":"250","district":"Leh","id":"admin@pds","warehousetype":"swc","longitude":"84.65484"}
+[2025-03-18 23:31:20] District User -> Warehouse Edit->Leh@pds|
+Requested JSON -> {"name":"Arjun Upadhyay","uniqueid":"WH_67cf2235e62f","active":"1","type":"motorable","latitude":"20.95735","storage":"250","district":"Leh","id":"admin@pds","warehousetype":"swc","longitude":"84.65484"}

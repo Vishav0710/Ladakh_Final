@@ -1,0 +1,3 @@
+[2025-04-22 16:36:01] User -> FPS added ->admin@pds| Requested JSON -> {"name":"Testing","type":"Model FPS","latitude":"20","longitude":"20","district":"Kargil","id":"admin@pds","demand":"20","demand_rice":"20","demand_frice":"20"}
+[2025-04-22 16:45:06] User -> User Add ->admin@pds| Requested JSON -> {"newusername":"test@pds","district":"admin","newpassword":"test"} | test@pds
+[2025-04-22 16:45:26] User -> Delete User ->admin@pds| Requested JSON -> {"uid":"68077a3ac6123"} | 

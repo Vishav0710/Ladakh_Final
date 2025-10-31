@@ -1,0 +1,2 @@
+[2025-04-23 11:15:28] User -> FPS added ->admin@pds| Requested JSON -> {"name":"Testing","type":"Model FPS","latitude":"34.462922","longitude":"76.124506","district":"Kargil","id":"11A","demand":"10","demand_rice":"10","demand_frice":"10"}
+[2025-04-23 11:53:40] User -> Delete User ->admin@pds| Requested JSON -> {"uid":"660796f7a2b2d"} | admin@dfpd
