@@ -6,57 +6,57 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <meta name="theme-color" content="#ffffff" />
+    <!-- Prevent caching of login page (in addition to sending headers server-side) -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
     <!-- END META SECTION -->
 
     <!-- CSS INCLUDE -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      id="theme"
-      href="css/theme-default.css"
-    />
+    <link rel="stylesheet" type="text/css" id="theme" href="css/theme-default.css" />
     <!-- EOF CSS INCLUDE -->
     <script src="crypto-js/crypto-js.js"></script>
     <script src="js/Encryption.js"></script>
 
-    <script
-      type="text/javascript"
-      src="js/plugins/jquery/jquery.min.js"
-    ></script>
+    <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
 
     <script>
       var captcha;
 
       function generateCaptcha() {
+        // Reset visible fields (do not prefill password ever)
         document.getElementById("captchainput").value = "";
         document.getElementById("password").value = "";
         document.getElementById("username").value = "";
         captcha = document.getElementById("image");
         var uniquechar = "";
-        const randomchar =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const randomchar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         for (let i = 0; i < 5; i++) {
-          uniquechar += randomchar.charAt(Math.random() * randomchar.length);
+          uniquechar += randomchar.charAt(Math.floor(Math.random() * randomchar.length));
         }
-        captcha.innerHTML = uniquechar;
+        captcha.innerText = uniquechar;
 
-        // Store CAPTCHA in session
+        // Store CAPTCHA in session (server must validate on submit)
         $.ajax({
           url: "captcha.php",
           method: "POST",
           data: { captcha: uniquechar },
           success: function (response) {
-            console.log("CAPTCHA stored in session: " + response);
+            console.log("CAPTCHA stored in session");
+          },
+          error: function () {
+            console.log("Failed to store CAPTCHA");
           },
         });
       }
 
-      // Verify CAPTCHA
+      // Verify client-side captcha only to avoid unnecessary server postbacks;
+      // Final verification must be performed server-side in api/Login.php using server-stored session captcha.
       function verifyCaptcha() {
         const usr_input = document.getElementById("captchainput").value;
-        if (usr_input === captcha.innerHTML) {
+        if (usr_input === captcha.innerText) {
+          // Optional: client-side encryption before submit (NOT a replacement for TLS).
+          // Ensure the site uses HTTPS. If you do client-side encryption, still verify credentials server-side normally.
           var readableString = document.getElementById("password").value;
           var nonceValue = "nonce_value";
           let encryption = new Encryption();
@@ -70,9 +70,9 @@
         }
       }
 
-      // Fetch CSRF Token
+      // Fetch CSRF Token and inject into hidden field (server should generate token tied to session)
       function injectCSRFToken() {
-        fetch("get_token.php")
+        fetch("get_token.php", { credentials: 'same-origin' })
           .then((response) => response.text())
           .then((token) => {
             document.getElementById("csrf_token").value = token;
@@ -87,16 +87,16 @@
       }
 
       window.onload = initPage;
-
       window.addEventListener("pageshow", function (event) {
         if (event.persisted) {
           initPage();
         }
       });
     </script>
+
     <style>
       #image {
-        box-shadow: "black";
+        box-shadow: 0 0 4px black;
         width: 80px;
         font-weight: 600;
         height: 60px;
@@ -113,7 +113,6 @@
         background-image: url("img/Ladakh1.png");
         background-image: url("img/Ladakh2.png");
         background-image: url("img/Punjab-login-backdrop.png");
-
         background-size: cover;
       }
       .login-container {
@@ -121,52 +120,28 @@
         background-position: center;
         animation: slideshow 10s infinite;
       }
-
       @keyframes slideshow {
-        0%,
-        100% {
-          background-image: url("img/Ladakh1.png");
-        }
-        50% {
-          background-image: url("img/Ladakh2.png");
-        }
+        0%, 100% { background-image: url("img/Ladakh1.png"); }
+        50% { background-image: url("img/Ladakh2.png"); }
       }
-
-      .login-body {
-        background: #000;
-      }
+      .login-body { background: #000; }
     </style>
   </head>
+
   <body>
     <div class="login-container">
-      <b
-        ><a
-          href="Login.html"
-          style="
-            color: #fff;
-            padding: 10px;
-            background-color: #000;
-            font-size: 30px;
-            text-decoration: none;
-            border-radius: 10px;
-          "
-          >Home Page</a
-        ></b
-      >
+      <b>
+        <a href="Login.html" style="color: #fff; padding: 10px; background-color: #000; font-size: 30px; text-decoration: none; border-radius: 10px;">
+          Home Page
+        </a>
+      </b>
 
       <div class="login-box animated fadeInDown" style="margin-top: -50px">
-        <div
-          class="login-body"
-          style="background-color: #060505"
-          autocomplete="off"
-        >
+        <div class="login-body" style="background-color: #060505">
           <div class="login-title"><strong>Welcome</strong>, Please login</div>
-          <form
-            action="api/Login.php"
-            class="form-horizontal"
-            method="post"
-            onsubmit="return verifyCaptcha()"
-          >
+
+          <!-- IMPORTANT: autocomplete="off" on form and inputs; add novalidate if you don't want browser constraint UI -->
+          <form action="api/Login.php" class="form-horizontal" method="post" onsubmit="return verifyCaptcha()" autocomplete="off" novalidate>
             <div class="form-group">
               <div class="col-md-12">
                 <input
@@ -176,11 +151,18 @@
                   class="form-control"
                   placeholder="Username"
                   style="background-color: #2b2929"
+                  required
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="none"
+                  spellcheck="false"
                 />
               </div>
             </div>
+
             <div class="form-group">
               <div class="col-md-12">
+                <!-- readonly trick: prevents many password managers from auto-filling until user focuses -->
                 <input
                   type="password"
                   id="password"
@@ -188,10 +170,17 @@
                   class="form-control"
                   placeholder="Password"
                   style="background-color: #2b2929"
-                  ;
+                  required
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="none"
+                  spellcheck="false"
+                  readonly
+                  onfocus="this.removeAttribute('readonly');"
                 />
               </div>
             </div>
+
             <div class="form-group">
               <div class="col-md-12">
                 <input
@@ -202,34 +191,24 @@
                   placeholder="Captcha Code"
                   required
                   style="background-color: #2b2929"
-                  ;
+                  autocomplete="off"
                 />
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-md-12">
-                <input
-                  type="hidden"
-                  id="csrf_token"
-                  name="csrf_token"
-                  class="form-control"
-                />
-              </div>
-            </div>
+
+            <!-- CSRF token injected by JS; server must validate token on POST -->
+            <input type="hidden" id="csrf_token" name="csrf_token" />
+
             <div class="form-group">
               <div class="row">
                 <div class="col-md-8">
-                  <center>
-                    <div id="image" selectable="False"></div>
-                  </center>
+                  <center><div id="image" aria-hidden="true"></div></center>
                 </div>
                 <div class="col-md-4">
                   <center>
-                    <span
-                      class="fa fa-refresh"
-                      style="font-size: 30px; color: white; margin-top: 20px"
-                      onclick="generateCaptcha()"
-                    ></span>
+                    <button type="button" class="btn btn-link" title="Refresh captcha" onclick="generateCaptcha()">
+                      <span class="fa fa-refresh" style="font-size: 30px; color: white; margin-top: 20px"></span>
+                    </button>
                   </center>
                 </div>
               </div>
@@ -237,20 +216,16 @@
 
             <div class="form-group">
               <center>
-                <button class="btn btn-info btn-block" style="width: 50%">
-                  Log In
-                </button>
+                <!-- Make the button explicitly type=submit -->
+                <button type="submit" class="btn btn-info btn-block" style="width: 50%;">Log In</button>
               </center>
             </div>
           </form>
         </div>
+
         <div class="login-footer" style="background-color: #060505">
-          <div class="pull-left">
-            <!-- <a href="Signup.html"><h5 style="color: #fff">Signup</h5></a> -->
-          </div>
-          <div class="pull-right">
-            <!-- <a href="Reset.html"><h5 style="color: #fff">Reset Password</h5></a> -->
-          </div>
+          <div class="pull-left"></div>
+          <div class="pull-right"></div>
         </div>
       </div>
     </div>

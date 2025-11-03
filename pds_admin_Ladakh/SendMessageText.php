@@ -48,7 +48,20 @@ require('Header.php');
                                                 </div>
                                             </div>
 											
-											<input type="hidden" id="uniqueid" name="uniqueid" value="<?php  echo $_POST["uid"] ?>" />
+                                                <?php
+                                                // Read and validate the incoming uid
+                                                $rawUid = $_POST['uid'] ?? '';
+
+                                                // Accept only an identifier (adjust the pattern/length to your needs)
+                                                if (!preg_match('/^[A-Za-z0-9_-]{1,64}$/', $rawUid)) {
+                                                    // invalid -> drop it or handle as you prefer
+                                                    $rawUid = '';
+                                                }
+
+                                                // Escape *before* placing into HTML to avoid breaking out of attributes
+                                                $safeUid = htmlspecialchars($rawUid, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                                                ?>
+                                                <input type="hidden" id="uniqueid" name="uniqueid" value="<?php echo $safeUid; ?>" />
 											
                                         </div>
                                     </div>

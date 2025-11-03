@@ -41,3 +41,11 @@
 [2025-10-31 11:08:41] User -> Send Message ->admin@pds| Requested JSON ->
 {"message":"admin\r\n","uniqueid":"68d37823d356b"} | Leh@pds
 [2025-10-31 11:08:50] RateLimit -> SendMessage -> user: admin@pds | IP: ::1
+[2025-10-31 12:19:17] User -> Send Message ->admin@pds| Requested JSON ->
+{"message":"scriptalert1script","uniqueid":"68d37823d356b"} | Leh@pds
+[2025-10-31 12:22:48] User -> Send Message ->admin@pds| Requested JSON ->
+{"message":"iframe","uniqueid":"68d37823d356b"} | Leh@pds
+[2025-10-31 12:22:54] User -> Delete Message ->admin@pds| Requested JSON
+-> iframe | Leh@pds
+[2025-10-31 12:22:55] User -> Delete Message ->admin@pds| Requested JSON
+-> scriptalert1script | Leh@pds
