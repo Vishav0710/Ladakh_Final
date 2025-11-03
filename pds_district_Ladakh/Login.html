@@ -84,6 +84,8 @@
 
       window.onload = initPage;
 
+      
+
       window.addEventListener("pageshow", function (event) {
         if (event.persisted) {
           initPage();
@@ -150,7 +152,7 @@
         ></b
       >
 
-      <div class="login-box animated fadeInDown" style="margin-top: -50px">
+            <div class="login-box animated fadeInDown" style="margin-top: -50px">
         <div class="login-body" style="background-color: #060505">
           <div class="login-title"><strong>Welcome</strong>, Please login</div>
           <form
@@ -168,6 +170,7 @@
                   class="form-control"
                   placeholder="Username"
                   style="background-color: #2b2929"
+                  autocomplete="off"
                 />
               </div>
             </div>
@@ -180,7 +183,8 @@
                   class="form-control"
                   placeholder="Password"
                   style="background-color: #2b2929"
-                  ;
+				          onpaste="return false;"
+                  autocomplete="off"
                 />
               </div>
             </div>
@@ -194,10 +198,11 @@
                   placeholder="Captcha Code"
                   required
                   style="background-color: #2b2929"
-                  ;
+                  autocomplete="off"
                 />
               </div>
-			   <div class="form-group">
+            </div>
+            <div class="form-group">
               <div class="col-md-12">
                 <input
                   type="hidden"
@@ -237,7 +242,7 @@
         </div>
         <div class="login-footer" style="background-color: #060505">
           <div class="pull-left">
-            <!-- <a href="Signup.html"><h5 style="color:#fff">Signup</h5></a> -->
+            <!--<a href="Signup.html"><h5 style="color:#fff">Signup</h5></a>-->
           </div>
           <div class="pull-right">
             <!-- <a href="Reset.html"><h5 style="color:#fff">Reset Password</h5></a> -->
