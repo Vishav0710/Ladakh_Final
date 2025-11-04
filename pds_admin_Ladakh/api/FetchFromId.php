@@ -9,10 +9,24 @@ if(!SessionCheck()){
 
 $month = $_POST['month'];
 $district = $_POST['district'];
+
+// Validate month (letters, numbers, underscore)
+if (!preg_match('/^[a-zA-Z0-9_]+$/', $month)) {
+    die("Invalid month format");
+}
+
+// Validate district (letters only)
+if (!preg_match('/^[a-zA-Z]+$/', $district)) {
+    die("Invalid district name");
+}
 $parts = explode('_', $month);
 
+if (count($parts) !== 2) {
+    die("Invalid month_year format");
+}
+
 $month = $parts[0];
-$year = $parts[1]; 
+$year = $parts[1];
 $query = "SELECT * FROM optimised_table WHERE month='$month' AND year='$year'";
 $result = mysqli_query($con,$query);
 $numrow = mysqli_num_rows($result);

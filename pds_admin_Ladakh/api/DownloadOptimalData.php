@@ -2,6 +2,7 @@
 
 require('../util/Connection.php');
 require '../vendor/autoload.php';
+require('../util/SessionCheck.php');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
